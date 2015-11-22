@@ -12,8 +12,8 @@
 
 pthread_t tid;
 
-void lv2_play(float* const output0, float* const output1, unsigned long nframes);
-void lv2_src(const float* const input0, const float* const input1, unsigned long nframes);
+void effect_play(float* const output0, float* const output1, unsigned long nframes);
+void effect_src(const float* const input0, const float* const input1, unsigned long nframes);
 
 typedef enum {
 	AMP_INPUT0  = 0,
@@ -110,8 +110,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 	}
 */
 
-	lv2_src(input0, input1, n_samples);
-	lv2_play(output0, output1, n_samples);
+	effect_src(input0, input1, n_samples);
+	effect_play(output0, output1, n_samples);
 
 }
 
