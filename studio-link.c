@@ -103,12 +103,6 @@ run(LV2_Handle instance, uint32_t n_samples)
 	const float* const input1  = amp->input1;
 	float* const       output0 = amp->output0;
 	float* const       output1 = amp->output1;
-/*
-	for (uint32_t pos = 0; pos < n_samples; pos++) {
-		output0[pos] = input0[pos];
-		output1[pos] = input1[pos];
-	}
-*/
 
 	effect_src(input0, input1, n_samples);
 	effect_play(output0, output1, n_samples);
