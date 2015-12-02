@@ -125,9 +125,9 @@ cleanup(LV2_Handle instance)
 {
 	free(instance);
 	if (running) {
-		re_cancel();
+		//re_cancel();
+		ua_stop_all(false);
 		(void)pthread_join(tid, NULL);
-		//ua_stop_all(false);
 		ua_close();
 		mod_close();
 		libre_close();
