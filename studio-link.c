@@ -12,8 +12,15 @@
 
 pthread_t tid;
 
-void effect_play(float* const output0, float* const output1, unsigned long nframes);
-void effect_src(const float* const input0, const float* const input1, unsigned long nframes);
+struct session;
+void effect_play(struct session *sess, float* const output0,
+		float* const output1, unsigned long nframes);
+void effect_src(struct session *sess, const float* const input0,
+		const float* const input1, unsigned long nframes);
+
+struct session* effect_session_start(void);
+void effect_session_stop(struct session *session);
+
 
 typedef enum {
 	AMP_INPUT0  = 0,
@@ -28,6 +35,7 @@ typedef struct {
 	const float* input1;
 	float*       output0;
 	float*       output1;
+	struct session *sess;
 } Amp;
 
 bool running = false;
@@ -56,6 +64,8 @@ instantiate(const LV2_Descriptor*     descriptor,
 		pthread_create(&tid, NULL, (void*(*)(void*))&re_main, NULL);
 		running = true;
 	}
+
+	amp->sess = effect_session_start();
 
 	return (LV2_Handle)amp;
 }
@@ -104,8 +114,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 	float* const       output0 = amp->output0;
 	float* const       output1 = amp->output1;
 
-	effect_src(input0, input1, n_samples);
-	effect_play(output0, output1, n_samples);
+	effect_src(amp->sess, input0, input1, n_samples);
+	effect_play(amp->sess, output0, output1, n_samples);
 
 }
 
@@ -123,7 +133,8 @@ deactivate(LV2_Handle instance)
 static void
 cleanup(LV2_Handle instance)
 {
-	free(instance);
+	Amp* amp = (Amp*)instance;
+	effect_session_stop(amp->sess);
 	if (running) {
 		//re_cancel();
 		ua_stop_all(false);
@@ -133,6 +144,8 @@ cleanup(LV2_Handle instance)
 		libre_close();
 		running = false;
 	}
+
+	free(instance);
 }
 
 static const void*
