@@ -19,7 +19,7 @@ void effect_src(struct session *sess, const float* const input0,
 		const float* const input1, unsigned long nframes);
 
 struct session* effect_session_start(void);
-void effect_session_stop(struct session *session);
+int effect_session_stop(struct session *session);
 
 
 typedef enum {
@@ -134,8 +134,7 @@ static void
 cleanup(LV2_Handle instance)
 {
 	Amp* amp = (Amp*)instance;
-	effect_session_stop(amp->sess);
-	if (running) {
+	if (!effect_session_stop(amp->sess)) {
 		//re_cancel();
 		ua_stop_all(false);
 		(void)pthread_join(tid, NULL);

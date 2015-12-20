@@ -1,4 +1,4 @@
-# Studio Link - Linux LV2 Plugin
+# Studio Link - Linux LV2 VoIP/AoIP Plugin
 
 ## Install/Update
 
