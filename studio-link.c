@@ -17,6 +17,9 @@ void effect_play(struct session *sess, float* const output0,
 		float* const output1, unsigned long nframes);
 void effect_src(struct session *sess, const float* const input0,
 		const float* const input1, unsigned long nframes);
+void effect_bypass(struct session *sess, float* const output0,
+		float* const output1, const float* const input0,
+		const float* const input1, unsigned long nframes);
 
 struct session* effect_session_start(void);
 int effect_session_stop(struct session *session);
@@ -116,7 +119,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 
 	effect_src(amp->sess, input0, input1, n_samples);
 	effect_play(amp->sess, output0, output1, n_samples);
-
+	effect_bypass(amp->sess, output0, output1,
+			input0, input1, n_samples);
 }
 
 static void
