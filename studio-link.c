@@ -61,6 +61,7 @@ instantiate(const LV2_Descriptor*     descriptor,
 		(void)sys_coredump_set(true);
 		libre_init();
 		conf_configure();
+		baresip_init(conf_config(), false);
 		ua_init("baresip v" BARESIP_VERSION " (" ARCH "/" OS ")",
 				true, true, true, false);
 		conf_modules();
@@ -141,8 +142,12 @@ cleanup(LV2_Handle instance)
 	if (!effect_session_stop(amp->sess)) {
 		//re_cancel();
 		ua_stop_all(false);
-		(void)pthread_join(tid, NULL);
+		//(void)pthread_join(tid, NULL);
+		sys_msleep(500);
 		ua_close();
+		re_cancel();
+		conf_close();
+		baresip_close();
 		mod_close();
 		libre_close();
 		running = false;
