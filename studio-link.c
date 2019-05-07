@@ -60,7 +60,7 @@ instantiate(const LV2_Descriptor*     descriptor,
 				BARESIP_VERSION);
 		(void)sys_coredump_set(true);
 		libre_init();
-		conf_configure(true);
+		conf_configure(false);
 		baresip_init(conf_config(), false);
 		ua_init("baresip v" BARESIP_VERSION " (" ARCH "/" OS ")",
 				true, true, true, false);
