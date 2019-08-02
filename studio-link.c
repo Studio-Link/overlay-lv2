@@ -61,9 +61,9 @@ instantiate(const LV2_Descriptor*     descriptor,
 		(void)sys_coredump_set(true);
 		libre_init();
 		conf_configure(false);
-		baresip_init(conf_config(), false);
+		baresip_init(conf_config());
 		ua_init("baresip v" BARESIP_VERSION " (" ARCH "/" OS ")",
-				true, true, true, false);
+				true, true, true);
 		conf_modules();
 		pthread_create(&tid, NULL, (void*(*)(void*))&re_main, NULL);
 		running = true;
